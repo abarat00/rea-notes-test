@@ -1,10 +1,14 @@
 function toCsv(notes) {
-  const quote = (value) => `"${String(value).replaceAll('"', '""')}"`;
+  const guard = (value) => {
+    const text = String(value);
+    return /^[=+\-@]/.test(text) ? `'${text}` : text;
+  };
+  const quote = (value) => `"${guard(value).replaceAll('"', '""')}"`;
   return (
     [
       "id,title",
-      ...notes.map((note) => `${note.id},${quote(note.title)}`),
-    ].join("\n") + "\n"
+      ...notes.map((note) => `${guard(note.id)},${quote(note.title)}`),
+    ].join("\r\n") + "\r\n"
   );
 }
 
